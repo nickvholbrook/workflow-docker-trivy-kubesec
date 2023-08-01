@@ -29,4 +29,10 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/ubuntuweb:1.0
+      - name: trivy scan
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+          trivy image -f json -o trivy-report.json ${{ secrets.DOCKERHUB_USERNAME }}/ubuntuweb:1.0
+          echo "printing trivy report"
+          cat trivy-report.json          
 
